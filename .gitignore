@@ -1,0 +1,12 @@
+# Visual Studio
+.vs/
+*.exe
+*.obj
+*.pdb
+*.user
+*.suo
+*.ipch
+*.opensdf
+*.tlog
+*.lastbuildstate
+*.sdf
