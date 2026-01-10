@@ -1,7 +1,4 @@
 ﻿  QueueSystem.cpp
-  main.cpp
-C:\Users\Taras\source\repos\applicationSim\main.cpp(4,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-  Generating Code...
   applicationSim.vcxproj -> C:\Users\Taras\source\repos\applicationSim\x64\Debug\applicationSim.exe
   'pwsh.exe' is not recognized as an internal or external command,
   operable program or batch file.

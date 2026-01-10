@@ -1,17 +1,15 @@
 #pragma once
 
-void createClient(const std::string& name, const std::string& type, const int& complexity, const int& patienceTime);
+void listOperators();
 
-void printClient(const Client& c);
+void createOperator(const int& operatorId, const std::string& name, const int& qualification, const int& experience, const int& withoutBreak);
 
-const Client& getClient(int index);
+void generateRandomClient(int& clientId);
 
-void printClient();
+void createClient(const int& clientId, const std::string& name, const std::string& type, const int& complexity, const int& patienceTime,const int& operatingBy);
 
-void reqClient();
+void manageClient();
 
-void inClient();
+void processOperator();
 
-void addApplication();
-
-void outClient();
+int calculateServiceTime(const Client& c, const Operator& op);
