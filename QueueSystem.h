@@ -13,3 +13,5 @@ void manageClient();
 void processOperator();
 
 int calculateServiceTime(const Client& c, const Operator& op);
+
+void clientPatienceTime();

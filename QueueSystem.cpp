@@ -19,7 +19,7 @@ void createOperator(const int& operatorId,const std::string& name, const int& qu
 	Operator o{operatorId ,name, qualification, experience, withoutBreak };
 
 	operators.push_back(o);
-	std::cout << "Added new operator: " << o.name << std::endl;
+	std::cout << "[MODERATORS] Added new operator: " << o.name << std::endl;
 	isOperator = true;
 };
 
@@ -29,12 +29,24 @@ void listOperators() {
 	createOperator(3, "Vitalii", 3, 3, 0);
 }
 
+void printAddClients(const Client& c) {
+	std::cout
+		<< "[ADD IN QUEUE] "
+		<< "ID: " << c.clientId
+		<< ", Name: " << c.name
+		<< ", Type: " << c.type
+		<< ", Complexity: " << c.complexity
+		<< ", Patience: " << c.patienceTime << std::endl;
+};
+
 void printQueue(const std::vector<Client>& queue, const std::string& title) {
-	std::cout << title << " list:" << std::endl;
+	std::cout << std::endl << title << " list:" << std::endl;
 
 	for (const Client& c : queue) {
 		std::cout
-			<< "Name: " << c.name
+			<< "[UPD QUEUE] "
+			<< "ID: " << c.clientId
+			<< ", Name: " << c.name
 			<< ", Type: " << c.type
 			<< ", Complexity: " << c.complexity
 			<< ", Patience: " << c.patienceTime << std::endl;
@@ -60,11 +72,11 @@ void createClient(const int& clientId,const std::string& name, const std::string
 
 	if (c.type == "VIP") {
 		vipClients.push_back(c);
-		printQueue(vipClients, "VIP clients");
+		printAddClients(c);
 	}
 	else {
 		clients.push_back(c);
-		printQueue(clients, "Regular clients");
+		printAddClients(c);
 	}
 
 };
@@ -73,15 +85,46 @@ void assignClientToOperator(Operator& op, const Client& c) {
 	op.currentClient = c;
 	op.remainingTime = calculateServiceTime(c, op);
 	op.isBusy = true;
+
+	clientPatienceTime();
 };
 
 void releaseOperator(Operator& op) {
-	std::cout << "--------------------------" << std::endl
-		<< "Client name/id: " << op.currentClient.name << "/" << op.currentClient.clientId << ", Operated by: " << op.name << std::endl
-		<< "--------------------------" << std::endl;
+	std::cout << "[OPERATED] Client name/id: " << op.currentClient.name << "/" << op.currentClient.clientId << ", Operated by: " << op.name << std::endl;
 
 	op.remainingTime = 0;
 	op.isBusy = false;
+};
+
+void clientPatienceTime() {
+	// ÄÎÁÀÂËÅÍÍß ÍÅÒÅÐÏÈÌÎÑÒ² ÏÐÎÑÒÈÌ ÊË²ªÍÒÀÌ
+	for (Client& c : clients) {
+
+		c.patienceTime--;
+
+		if (c.patienceTime <= 0) {
+			std::erase_if(clients, [&](const Client& cl) {
+				return cl.clientId == c.clientId;
+				});
+
+			std::cout << "[LEFT] ID:" << c.clientId << ", NAME: " << c.name << " - has left!" << std::endl;
+		}
+		printQueue(clients, "Regular queue:");
+	}
+	// ÄÎÁÀÂËÅÍÍß ÍÅÒÅÐÏÈÌÎÑÒ² VIP ÊË²ªÍÒÀÌ
+	for (Client& c : vipClients) {
+
+		c.patienceTime--;
+
+		if (c.patienceTime <= 0) {
+			std::erase_if(vipClients, [&](const Client& cl) {
+				return cl.clientId == c.clientId;
+				});
+
+			std::cout << "[LEFT] " << c.name << " - has left!" << std::endl;
+		}
+		printQueue(vipClients, "Vip queue:");
+	}
 };
 
 void manageClient() {
@@ -99,7 +142,6 @@ void manageClient() {
 
 			assignClientToOperator(op, clients.front());
 			clients.erase(clients.begin());
-
 		};
 	};
 };
@@ -118,6 +160,7 @@ void processOperator() {
 
 	};
 };
+
 
 int calculateServiceTime(const Client& c, const Operator& op) {
 	int baseTime = c.complexity * 3;
